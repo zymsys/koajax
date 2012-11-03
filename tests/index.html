@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ko.ajax tests</title>
+    <script data-main="test.js" type="text/javascript" src="../scripts/3rdparty/require.js"></script>
+    <link rel="stylesheet" href="../scripts/3rdparty/qunit-1.10.0.css">
+</head>
+<body>
+<script data-bind="ajax: '/server/hello.php'" type="application/json">
+{
+    "trigger": "sayHello",
+    "receive": {
+        "*": "helloMessage"
+    }
+}
+</script>
+<script data-bind="ajax: '/server/echo.php'" type="application/json">
+{
+    "type": "POST",
+    "trigger": "sendPing",
+    "send": {
+        "send":"ping"
+    },
+    "receive": {
+        "pong": "response",
+        "pang": "ether"
+    }
+}
+</script>
+<!-- Because this version of the echo config uses the same trigger as the normal one, both are executed
+and other echo tests make sure no-response works without throwing exceptions. -->
+<script data-bind="ajax: '/server/echo.php?noSend'" type="application/json">
+{
+    "type": "POST",
+    "trigger": "sendPing",
+    "send": {
+        "send":"ping"
+    }
+    }
+</script>
+<script data-bind="ajax: '/server/deep.php'" type="application/json">
+{
+    "type": "POST",
+    "contentType": "application/json",
+    "trigger": "triggers/sendName",
+    "send": {
+        "name/first": "inputFields/first",
+        "name/last": "inputFields/last"
+    },
+    "receive": {
+        "outputFields/fullName": "calculated/fullName"
+    }
+}
+</script>
+<script data-bind="ajax: '/server/array.php'" type="application/json">
+{
+    "contentType": "application/json",
+    "trigger": "callGhostbusters",
+    "receive": {
+        "ghostbusters": "ghostbusters"
+    }
+}
+</script>
+<script data-bind="ajax: '/server/error.php'" type="application/json">
+{
+    "trigger": "call404"
+}
+</script>
+<script data-bind="ajax: '/server/ucase.php'" type="application/json">
+{
+    "trigger": "fixCase",
+    "contentType": "application/json",
+    "send": {
+        "people": {
+            "viewModelPath": "people",
+            "map": {
+                "firstName": "first",
+                "lastName": "last"
+            }
+        }
+    },
+    "receive": {
+        "people": {
+            "viewModelPath": "people",
+            "map": {
+                "first": "firstName",
+                "last": "lastName"
+            }
+        }
+    }
+}
+</script>
+<script data-bind="ajax:'/send'" type="application/json">
+{
+    "type": "POST",
+    "trigger": "send",
+    "send": {
+        "from": "name",
+        "message": "msg"
+    }
+}
+</script>
+<script data-bind="ajax:'/receive'" type="application/json">
+{
+    "trigger": "waitForResponse",
+    "receive": {
+        "receivedFrom": "from",
+        "receivedMessage": "message"
+    }
+}
+</script>
+<div id="qunit"></div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <title>Knockout AJAX Chat Demo (node.js)</title>
+    <script src="/3rdparty/jquery-1.8.2.min.js"></script>
+    <script src="/3rdparty/knockout-2.1.0.debug.js"></script>
+    <script src="/koajax-0.0.1.js"></script>
+    <script src="/javascripts/chatClient.js"></script>
+</head>
+<body>
+<div>
+    <label for="name">You are:</label><input id="name" data-bind="value:name">
+</div>
+<div>
+    <label for="msg">Message:</label><input id="msg" data-bind="value:msg">
+    <input type="button" data-bind="trigger:send" value="Send">
+    <script data-bind="ajax:'/send'" type="application/json">
+        {
+            "type": "POST",
+            "trigger": "send",
+            "send": {
+                "from": "name",
+                "message": "msg"
+            }
+        }
+    </script>
+</div>
+<div id="chatter">
+<script data-bind="ajax:'/receive'" type="application/json">
+    {
+        "trigger": "waitForResponse",
+        "receive": {
+            "receivedFrom": "from",
+            "receivedMessage": "message"
+        }
+    }
+</script>
+</div>
+</body>
+</html>
