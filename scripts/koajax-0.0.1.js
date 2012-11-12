@@ -209,7 +209,8 @@
                 if (!endpoint.receive) endpoint.receive = {};
                 function registerDependentObservable(endpoint, trigger) {
                     ko.computed(function () {
-                        if (trigger() && !activeEndpoints[endpointName]) {
+                        var triggerValue = trigger();
+                        if (triggerValue && !activeEndpoints[endpointName]) {
                             activeEndpoints[endpointName] = true;
                             var requestConfig = {
                                 success: function(data) {
@@ -231,7 +232,8 @@
                                 requestConfig.data = JSON.stringify(requestConfig.data);
                             }
                             function sendAjaxRequest() {
-                                $.ajax(endpointName, requestConfig)
+                                var url = endpointName.replace("{}", triggerValue);
+                                $.ajax(url, requestConfig)
                             }
                             var callbacksExecuted;
                             callbacksExecuted = executeCallbacks('before', endpointName, requestConfig, sendAjaxRequest);

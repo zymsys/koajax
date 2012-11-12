@@ -138,6 +138,12 @@ and other echo tests make sure no-response works without throwing exceptions. --
     }
 }
 </script>
+<script data-bind="ajax:'/server/triggerurl.php?trigger={}'" type="application/json">
+{
+    "trigger": "sendURLTrigger",
+    "send": {}
+}
+</script>
 <div id="qunit"></div>
 </body>
 </html>

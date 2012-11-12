@@ -90,6 +90,12 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
                     if (options.data['?id']) data = 'fail';
                     success(data);
                     break;
+                case '/server/triggerurl.php?trigger={}':
+                    success('fail');
+                    break;
+                case '/server/triggerurl.php?trigger=GO':
+                    success('ok');
+                    break;
                 case '/send':
                     for (var index in subscriptions) {
                         var subscription = subscriptions[index];
@@ -310,7 +316,7 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
             equal('foofoo',viewModel.doubleMe(), "Foo is doubled to foofoo");
             ko.ajax.unregisterCallback(endpoint, 'success', testCallback);
             start();
-        }
+        };
         ko.ajax.registerCallback(endpoint, 'success', testCallback);
         viewModel.doDouble(true);
     });
@@ -330,9 +336,24 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
             equal(data, 'ok', "No ID was sent with request");
             ko.ajax.unregisterCallback(endpoint, "success", testCallback);
             start();
-        }
+        };
         ko.ajax.registerCallback(endpoint, "success", testCallback);
         viewModel.triggerConditional(true);
+    });
+    test("Send trigger value in request URL", function () {
+        var viewModel = {
+                sendURLTrigger: ko.observable(false)
+            },
+            endpoint = '/server/triggerurl.php?trigger={}';
+        ko.applyBindings(viewModel);
+        stop();
+        var testCallback = function (endpointName, data) {
+            equal(data, 'ok', "Trigger was sent with URL");
+            ko.ajax.unregisterCallback(endpoint, "success", testCallback);
+            start();
+        };
+        ko.ajax.registerCallback(endpoint, "success", testCallback);
+        viewModel.sendURLTrigger('GO');
     });
     if (mockAjax) {
         test("Long Polling", function () {
