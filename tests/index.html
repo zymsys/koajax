@@ -129,6 +129,15 @@ and other echo tests make sure no-response works without throwing exceptions. --
     }
 }
 </script>
+<script data-bind="ajax:'/server/noid.php'" type="application/json">
+{
+    "trigger": "triggerConditional",
+    "send": {
+        "?id": "id",
+        "data": "somethingElse"
+    }
+}
+</script>
 <div id="qunit"></div>
 </body>
 </html>

@@ -152,6 +152,12 @@
                     requestData = requestData[pathPart];
                 }
                 pathPart = pathParts.shift();
+                if (pathPart[0] == '?') {
+                    //Conditional assignment - only assign if value is truthy
+                    pathPart = pathPart.substr(1);
+                    if (!value) return;
+                    if (value == '0') return;
+                }
                 requestData[pathPart] = value;
             }
             function setRequestData(requestData, path, map, observableArray) {
