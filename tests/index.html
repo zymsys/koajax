@@ -23,8 +23,7 @@
         "send":"ping"
     },
     "receive": {
-        "pong": "response",
-        "pang": "ether"
+        "pong": "response"
     }
 }
 </script>
@@ -67,27 +66,47 @@ and other echo tests make sure no-response works without throwing exceptions. --
     "trigger": "call404"
 }
 </script>
-<script data-bind="ajax: '/server/ucase.php'" type="application/json">
+<script data-bind="ajax: '/server/explode.php'" type="application/json">
 {
-    "trigger": "fixCase",
-    "contentType": "application/json",
+    "trigger": "explode",
     "send": {
-        "people": {
-            "viewModelPath": "people",
+        "text": "explodeText"
+    },
+    "receive": {
+        "exploded": {
+            "viewModelPath": "parts",
             "map": {
-                "firstName": "first",
-                "lastName": "last"
+                "value": "name"
+            }
+        }
+    }
+}
+</script>
+<script data-bind="ajax: '/server/implode.php'" type="application/json">
+{
+    "trigger": "implode",
+    "send": {
+        "text": {
+            "viewModelPath": "parts",
+            "map": {
+                "value": "name"
             }
         }
     },
     "receive": {
-        "people": {
-            "viewModelPath": "people",
-            "map": {
-                "first": "firstName",
-                "last": "lastName"
-            }
-        }
+        "*": "joined"
+    }
+}
+</script>
+<script data-bind="ajax:'/server/double.php'" type="application/json">
+{
+    "type": "POST",
+    "trigger": "doDouble",
+    "send": {
+        "text": "doubleMe"
+    },
+    "receive": {
+        "*": "doubleMe"
     }
 }
 </script>

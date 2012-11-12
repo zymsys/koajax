@@ -126,7 +126,7 @@
                                 responseItem = util.getPropertyFromPath(response, responsePath, false);
                                 break;
                             default:
-                                responseData = util.getPropertyFromPath(response, responsePath.viewModelPath, false);
+                                responseData = util.getPropertyFromPath(response, responsePath.viewModelPath);
                                 responseItem = [];
                                 for (i = 0, j = responseData.length; i < j; i += 1) {
                                     arrayItem = {};

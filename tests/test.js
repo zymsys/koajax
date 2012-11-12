@@ -49,6 +49,17 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
                         }
                     });
                     break;
+                case '/server/double.php':
+                    success(options.data.text.toString() + options.data.text.toString());
+                    break;
+                case '/server/explode.php':
+                    data = options.data.text.split(',');
+                    success({parts: data.map(function (item) { return {value: item}; })});
+                    break;
+                case '/server/implode.php':
+                    data = options.data.text.map(function (item) { return item.value; });
+                    success(data.join(','));
+                    break;
                 case '/server/array.php':
                     success({ ghostbusters: [
                         "Peter Venkman",
@@ -125,8 +136,7 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
         var viewModel = {
             "sendPing": ko.observable(false),
             "ping": ko.observable(message),
-            "pong": ko.observable(),
-            "pang": ko.observable()
+            "pong": ko.observable()
         };
         var endpoint = "/server/echo.php";
         ko.applyBindings(viewModel);
@@ -146,8 +156,7 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
         var viewModel = {
             "sendPing": ko.observable(false),
             "ping": ko.observable(originalMessage),
-            "pong": ko.observable(),
-            "pang": ko.observable()
+            "pong": ko.observable()
         };
         var endpoint = "/server/echo.php";
         ko.applyBindings(viewModel);
@@ -246,33 +255,62 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
         fragment.trigger('click');
         equal(true, viewModel.sendRequest(), "Click event sets trigger observable to true");
     });
-    test("Send/Receive Observable Arrays", function () {
+    test("Receive Simple Observable Array", function () {
         var viewModel = {
-            fixCase: ko.observable(),
-            people: ko.observableArray()
-        };
-        var endpoint = '/server/ucase.php';
-        function addPerson(first, last) {
-            viewModel.people.push({
-                firstName: first,
-                lastName: last
-            });
-        }
-        addPerson('peter','venkman');
-        addPerson('egon','spengler');
-        addPerson('ray','stantz');
-        addPerson('winston','zeddemore');
+                explode: ko.observable(),
+                explodeText: ko.observable('Peter,Egon,Ray,Winston'),
+                exploded: ko.observableArray([])
+            },
+            endpoint = '/server/explode.php';
         ko.applyBindings(viewModel);
         stop();
-        function testCallback(endpointName, data) {
-            equal('Peter', viewModel.people()[0].firstName(), "First item's name has been upper cased");
-            equal('Stantz', viewModel.people()[2].lastName(), "Third item's last name has been upper cased");
-            equal('Winston', viewModel.people()[3].firstName(), "Last item's name has been upper cased");
+        var testCallback = function (endpointName, data) {
+            var exploded = viewModel.exploded();
+            equal(4,exploded.length, "Got back four names");
+            equal('Peter', exploded[0].name(), "First is Peter");
+            equal('Winston', exploded[3].name(), "Last is Winston");
             ko.ajax.unregisterCallback(endpoint, 'success', testCallback);
             start();
         }
         ko.ajax.registerCallback(endpoint, 'success', testCallback);
-        viewModel.fixCase(true);
+        viewModel.explode(true);
+    });
+    test("Send Observable Array with Observables", function () {
+        var viewModel = {
+                implode: ko.observable(),
+                text: ko.observableArray([{name: 'Peter'}, {name: 'Egon}'}, {name: 'Ray'}, {name: 'Winston'}]),
+                joined: ko.observable()
+            },
+            endpoint = '/server/implode.php';
+        ko.applyBindings(viewModel);
+        stop();
+        var testCallback = function (endpointName, data) {
+            var joined = viewModel.joined();
+            equal('Peter,Egon,Ray,Winston', joined, "Names are joined");
+            ko.ajax.unregisterCallback(endpoint, 'success', testCallback);
+            start();
+        }
+        ko.ajax.registerCallback(endpoint, 'success', testCallback);
+        viewModel.implode(true);
+    });
+    test("Send/Receive from the same place", function() {
+        var viewModel = {
+                doDouble: ko.observable(false),
+                doubleMe: ko.observable('foo')
+            },
+            endpoint = '/server/double.php';
+        ko.applyBindings(viewModel);
+        stop();
+        var testCallback = function (endpointName, data) {
+            equal('foofoo',viewModel.doubleMe(), "Foo is doubled to foofoo");
+            ko.ajax.unregisterCallback(endpoint, 'success', testCallback);
+            start();
+        }
+        ko.ajax.registerCallback(endpoint, 'success', testCallback);
+        viewModel.doDouble(true);
+    });
+    test("Nested observable arrays with observable content", function() {
+        throw new Error("Unimplemented");
     });
     if (mockAjax) {
         test("Long Polling", function () {
