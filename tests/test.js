@@ -12,7 +12,8 @@
             baseUrl: '../scripts/3rdparty',
             paths: {
                 'koajax': '../koajax-0.0.1',
-                'knockout': 'knockout-2.2.0.debug'
+                'knockout': 'knockout-2.2.0'
+//                'knockout': 'knockout-2.2.0.debug'
             }
         });
     }

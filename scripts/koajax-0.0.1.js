@@ -181,7 +181,7 @@
                     targetData = {};
                     for (sourceName in sourceData) {
                         item = sourceData[sourceName];
-                        targetData[reverseMap[sourceName]] = (item.name && item.name == 'observable') ? item() : item;
+                        targetData[reverseMap[sourceName]] = (item.peek && typeof item.peek == 'function') ? item.peek() : item;
                     }
                     newArray.push(targetData);
                 }
