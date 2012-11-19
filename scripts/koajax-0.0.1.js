@@ -163,9 +163,13 @@
             function setRequestData(requestData, path, map, observableArray) {
                 var pathPart,
                     pathParts = path.split('/'),
-                    i, j, sourceData, targetData, sourceName,
+                    i, j, item, sourceData, targetData, sourceName,
                     observedArray = observableArray.peek(),
-                    newArray = [];
+                    newArray = [],
+                    reverseMap = {};
+                $.each(map, function (key, value) {
+                    reverseMap[value] = key;
+                });
                 while (pathParts.length > 1) {
                     pathPart = pathParts.shift();
                     if (!requestData[pathPart]) requestData[pathPart] = {};
@@ -176,7 +180,8 @@
                     sourceData = observedArray[i];
                     targetData = {};
                     for (sourceName in sourceData) {
-                        targetData[map[sourceName]] = sourceData[sourceName];
+                        item = sourceData[sourceName];
+                        targetData[reverseMap[sourceName]] = (item.name && item.name == 'observable') ? item() : item;
                     }
                     newArray.push(targetData);
                 }

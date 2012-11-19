@@ -286,24 +286,29 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
         ko.ajax.registerCallback(endpoint, 'success', testCallback);
         viewModel.explode(true);
     });
-//    test("Send Observable Array with Observables", function () {
-//        var viewModel = {
-//                implode: ko.observable(),
-//                text: ko.observableArray([{name: 'Peter'}, {name: 'Egon}'}, {name: 'Ray'}, {name: 'Winston'}]),
-//                joined: ko.observable()
-//            },
-//            endpoint = '/server/implode.php';
-//        ko.applyBindings(viewModel);
-//        stop();
-//        var testCallback = function (endpointName, data) {
-//            var joined = viewModel.joined();
-//            equal('Peter,Egon,Ray,Winston', joined, "Names are joined");
-//            ko.ajax.unregisterCallback(endpoint, 'success', testCallback);
-//            start();
-//        }
-//        ko.ajax.registerCallback(endpoint, 'success', testCallback);
-//        viewModel.implode(true);
-//    });
+    test("Send Observable Array with Observables", function () {
+        var viewModel = {
+                implode: ko.observable(),
+                parts: ko.observableArray([
+                    {name: ko.observable('Peter')},
+                    {name: ko.observable('Egon')},
+                    {name: ko.observable('Ray')},
+                    {name: ko.observable('Winston')}
+                ]),
+                joined: ko.observable()
+            },
+            endpoint = '/server/implode.php';
+        ko.applyBindings(viewModel);
+        stop();
+        var testCallback = function (endpointName, data) {
+            var joined = viewModel.joined();
+            equal(joined, 'Peter,Egon,Ray,Winston', "Names are joined");
+            ko.ajax.unregisterCallback(endpoint, 'success', testCallback);
+            start();
+        }
+        ko.ajax.registerCallback(endpoint, 'success', testCallback);
+        viewModel.implode(true);
+    });
     test("Send/Receive from the same place", function() {
         var viewModel = {
                 doDouble: ko.observable(false),
