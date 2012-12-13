@@ -326,9 +326,28 @@ require(['qunit-1.10.0','knockout','koajax','jquery-1.8.2.min'], function (qunit
         ko.ajax.registerCallback(endpoint, 'success', testCallback);
         viewModel.doDouble(true);
     });
-//    test("Nested observable arrays with observable content", function() {
-//        throw new Error("Unimplemented");
-//    });
+    test("Nested observable arrays with observable content", function() {
+        var viewModel = {
+            numbers: ko.observableArray([
+                ko.observableArray([
+                    {number: ko.observable(2)},
+                    {number: ko.observable(3)},
+                    {number: ko.observable(5)},
+                    {number: ko.observable(7)}
+                ]),
+                ko.observableArray([
+                    {number: ko.observable(1)},
+                    {number: ko.observable(1)},
+                    {number: ko.observable(2)},
+                    {number: ko.observable(3)},
+                    {number: ko.observable(5)},
+                    {number: ko.observable(8)}
+                ])
+            ]),
+            addThemAll: ko.observable(false)
+        };
+        throw new Error("Unimplemented");
+    });
     test("Send conditional values", function () {
         var viewModel = {
             id: ko.observable("0"),

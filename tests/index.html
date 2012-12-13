@@ -98,6 +98,18 @@ and other echo tests make sure no-response works without throwing exceptions. --
     }
 }
 </script>
+<script data-bind="ajax: '/server/add.php'" type="appliction/json">
+{
+    "trigger": "addThemAll",
+    "send": {
+        "n": {
+            "viewModelPath": "numbers",
+            "map": {
+
+    Note to self:  This just doesn't map.  The JSON notation I'm using here is crap.  Do this case manually
+    for now and re-invent this later with a better notation.  Also, combine send/receive blocks and use something
+    like 'fields' instead.
+</script>
 <script data-bind="ajax:'/server/double.php'" type="application/json">
 {
     "type": "POST",
