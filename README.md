@@ -1,9 +1,16 @@
 ko.ajax
 =======
 
-A knockout.js extension which allows you to create AJAX mappings to/from your knockout view models.  In the same
-way that knockout.js allows you to declaratively bind your UI to your view model, ko.ajax allows you to bind your
-view model to your AJAX services.  With bindings in place, your UI can interact with server data seamlessly.
+*Warning: I really liked this when I first wrote it, but after using it a couple of times I've grown to dislike
+it.  I object to the fact that I typically need two script blocks for each endpoint - one for incoming and one
+for outgoing data streams.  I expect to do a rewrite which merges these into one less confusing block of json.
+So if you use this, expect everything to change soon.  I don't expect to bother maintaining backward 
+compatibility.*
+
+Ko.ajax is a knockout.js extension which allows you to create AJAX mappings to/from your knockout view models.  
+In the same way that knockout.js allows you to declaratively bind your UI to your view model, ko.ajax allows 
+you to bind your view model to your AJAX services.  With bindings in place, your UI can interact with server 
+data seamlessly.
 
 Simple Example
 --------------
