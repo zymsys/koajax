@@ -31,7 +31,7 @@
             }
         }
     }
-    define(['knockout', 'jquery-1.8.2.min'], function (ko, $) {
+    define(['knockout', 'jquery'], function (ko, $) {
         if (!$) $ = global.jQuery;
         var util = {
             getPropertyFromPath: function (o, path, required) {
