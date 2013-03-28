@@ -238,7 +238,7 @@
                             }
                             function sendAjaxRequest() {
                                 var url = endpointName.replace("{}", triggerValue);
-                                $.ajax(url, requestConfig)
+                                $.ajax(url, requestConfig);
                             }
                             var callbacksExecuted;
                             callbacksExecuted = executeCallbacks('before', endpointName, requestConfig, sendAjaxRequest);
